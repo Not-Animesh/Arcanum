@@ -1,28 +1,15 @@
+
 "use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  Activity,
-  ArrowUpRight,
   BookOpen,
-  BrainCircuit,
-  BriefcaseBusiness,
-  CalendarDays,
-  ChevronDown,
   Code2,
-  Compass,
-  Database,
-  GraduationCap,
   LayoutDashboard,
-  Network,
-  PanelLeft,
+  Map,
   Settings2,
-  ShieldCheck,
-  Sparkles,
-  Terminal,
-  Trophy,
-  Waypoints,
 } from "lucide-react";
 
 import {
@@ -44,34 +31,9 @@ const navigation = [
   {
     label: "Workspace",
     items: [
-      { title: "Overview", href: "/", icon: LayoutDashboard },
-      { title: "Learning paths", href: "/learning-paths", icon: Compass },
-      { title: "Practice", href: "/practice", icon: Code2 },
-      { title: "Study sheets", href: "/sheets", icon: BookOpen },
-      { title: "Contests", href: "/contests", icon: Trophy },
-    ],
-  },
-  {
-    label: "Learning library",
-    items: [
-      { title: "Data structures", href: "/subjects/dsa", icon: Waypoints },
-      { title: "DBMS", href: "/subjects/dbms", icon: Database },
-      { title: "Operating systems", href: "/subjects/os", icon: Terminal },
-      { title: "Computer networks", href: "/subjects/cn", icon: Network },
-      { title: "OOP concepts", href: "/subjects/oops", icon: BrainCircuit },
-      { title: "Web development", href: "/subjects/web-dev", icon: Code2 },
-    ],
-  },
-  {
-    label: "Career preparation",
-    items: [
-      {
-        title: "Interview prep",
-        href: "/interview-prep",
-        icon: BriefcaseBusiness,
-      },
-      { title: "Study planner", href: "/planner", icon: CalendarDays },
-      { title: "Analytics", href: "/analytics", icon: Activity },
+      { title: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+      { title: "Problems", href: "/problems", icon: Code2 },
+      { title: "Roadmap", href: "/roadmap", icon: Map },
     ],
   },
 ];
@@ -79,10 +41,8 @@ const navigation = [
 export function AppSidebar() {
   const pathname = usePathname();
 
-  const isActive = (href: string) => {
-    if (href === "/") return pathname === "/";
-    return pathname === href || pathname.startsWith(`${href}/`);
-  };
+  const isActive = (href: string) =>
+    pathname === href || pathname.startsWith(`${href}/`);
 
   return (
     <Sidebar collapsible="icon" variant="sidebar">
@@ -90,9 +50,9 @@ export function AppSidebar() {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton
-              render={<Link href="/" />}
+              render={<Link href="/dashboard" />}
               size="lg"
-              tooltip="Arcanum home"
+              tooltip="Arcanum dashboard"
               className="gap-3"
             >
               <Image
@@ -100,14 +60,11 @@ export function AppSidebar() {
                 alt="Arcanum"
                 width={36}
                 height={36}
-                className="size-9 rounded-full object-cover"
+                className="size-9 shrink-0 rounded-full object-cover"
               />
-
-              <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-semibold tracking-wide">
-                  Arcanum
-                </span>
-              </div>
+              <span className="truncate font-semibold tracking-wide">
+                Arcanum
+              </span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
@@ -125,14 +82,13 @@ export function AppSidebar() {
             <SidebarGroupContent>
               <SidebarMenu className="gap-1">
                 {group.items.map((item) => {
-                  const active = isActive(item.href);
                   const Icon = item.icon;
 
                   return (
                     <SidebarMenuItem key={item.href}>
                       <SidebarMenuButton
                         render={<Link href={item.href} />}
-                        isActive={active}
+                        isActive={isActive(item.href)}
                         tooltip={item.title}
                         className="h-9 gap-3 rounded-lg px-3"
                       >
@@ -146,23 +102,6 @@ export function AppSidebar() {
             </SidebarGroupContent>
           </SidebarGroup>
         ))}
-
-        <SidebarGroup className="mt-auto px-3 py-3">
-          <SidebarGroupContent>
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton
-                  render={<Link href="/settings" />}
-                  tooltip="Settings"
-                  className="h-9 gap-3 rounded-lg px-3"
-                >
-                  <Settings2 className="size-[17px] shrink-0" />
-                  <span>Settings</span>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
       </SidebarContent>
 
       <SidebarSeparator />
@@ -171,38 +110,22 @@ export function AppSidebar() {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton
-              render={<Link href="/analytics" />}
-              tooltip="Your learning progress"
-              size="lg"
-              className="h-auto gap-3 rounded-xl border border-sidebar-border p-2"
+              render={<Link href="/settings" />}
+              isActive={isActive("/settings")}
+              tooltip="Settings"
+              className="h-9 gap-3 rounded-lg px-3"
             >
-              <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-muted">
-                <GraduationCap className="size-5" />
-              </div>
-
-              <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-medium">Your progress</span>
-                <span className="truncate text-xs text-muted-foreground">
-                  Keep building your skills
-                </span>
-              </div>
-
-              <ArrowUpRight className="size-4 shrink-0 text-muted-foreground" />
+              <Settings2 className="size-[17px] shrink-0" />
+              <span>Settings</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
 
         <div className="flex items-center gap-2 px-2 pb-1 pt-3 group-data-[collapsible=icon]:hidden">
-          <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-muted text-xs font-semibold">
-            A
-          </div>
-          <div className="min-w-0 flex-1">
-            <p className="truncate text-sm font-medium">Animesh</p>
-            <p className="truncate text-xs text-muted-foreground">
-              Learner account
-            </p>
-          </div>
-          <ShieldCheck className="size-4 shrink-0 text-muted-foreground" />
+          <BookOpen className="size-4 shrink-0 text-muted-foreground" />
+          <p className="text-xs text-muted-foreground">
+            Free learning workspace
+          </p>
         </div>
       </SidebarFooter>
 

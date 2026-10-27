@@ -1,41 +1,63 @@
-import * as React from "react";
-import type { Metadata } from "next";
-import { Geist, Geist_Mono, Inter } from "next/font/google";
 
-import { AppHeader } from "@/components/layout/app-header";
-import { AppSidebar } from "@/components/layout/app-sidebar";
-import {
-  SidebarInset,
-  SidebarProvider,
-} from "@/components/ui/sidebar";
+import type { Metadata } from "next";
+import { Poppins, JetBrains_Mono } from "next/font/google";
 
 import "./globals.css";
+import { ThemeProvider } from "@/components/layout/theme-provider";
+import { Navbar } from "@/components/layout/navbar";
 
-const geist = Geist({
-  variable: "--font-geist",
+const poppins = Poppins({
+  variable: "--font-poppins",
   subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
   display: "swap",
 });
 
-const inter = Inter({
-  variable: "--font-inter",
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-jetbrains",
   subsets: ["latin"],
+  weight: ["400", "500"],
   display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-  display: "swap",
-});
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL
+  ? new URL(process.env.NEXT_PUBLIC_SITE_URL)
+  : new URL("http://localhost:3000");
 
 export const metadata: Metadata = {
+  metadataBase: siteUrl,
+  applicationName: "Arcanum",
   title: {
     default: "Arcanum",
     template: "%s | Arcanum",
   },
   description:
-    "A learning platform for technical mastery, coding practice, and interview preparation.",
+    "A free learning platform for data structures, algorithms, computer science fundamentals, coding practice, and interview preparation.",
+  icons: {
+    icon: "/images/logo.png",
+    shortcut: "/images/logo.png",
+    apple: "/images/logo.png",
+  },
+  keywords: [
+    "Arcanum",
+    "coding interview preparation",
+    "data structures and algorithms",
+    "DSA practice",
+    "computer science",
+    "learning paths",
+    "coding practice",
+  ],
+  openGraph: {
+    type: "website",
+    siteName: "Arcanum",
+    title: "Arcanum — Learn. Practice. Master.",
+    description:
+      "Build your technical skills with structured learning paths, coding practice, and interview preparation.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({
@@ -44,26 +66,23 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geist.variable} ${inter.variable} ${geistMono.variable} min-h-screen bg-background text-foreground antialiased`}
-      >
-        <SidebarProvider defaultOpen>
-          <React.Suspense
-            fallback={<div className="w-(--sidebar-width) bg-sidebar hidden md:block" />}
-          >
-            <AppSidebar />
-          </React.Suspense>
-
-          <SidebarInset className="min-w-0">
-            <React.Suspense
-              fallback={<div className="h-14 border-b bg-background" />}
-            >
-              <AppHeader />
-            </React.Suspense>
-            <div className="flex-1 min-w-0">{children}</div>
-          </SidebarInset>
-        </SidebarProvider>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={`${poppins.variable} ${jetbrainsMono.variable}`}
+    >
+      <body className="min-h-screen bg-background font-sans text-foreground antialiased">
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="light"
+          enableSystem={false}
+          disableTransitionOnChange
+        >
+          <Navbar />
+          <main className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
+            {children}
+          </main>
+        </ThemeProvider>
       </body>
     </html>
   );
