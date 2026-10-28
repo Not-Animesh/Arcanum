@@ -1,33 +1,41 @@
+
 import * as React from "react";
 import Link from "next/link";
 import {
   ArrowRight,
   BookOpen,
   BrainCircuit,
-  Clock,
+  Clock3,
   Code2,
-  Cpu,
   Database,
-  Layers,
+  Layers3,
   ListOrdered,
   Network,
   Terminal,
   Waypoints,
 } from "lucide-react";
 
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { LearningResource } from "../types";
 import { cn } from "@/lib/utils";
+import type { LearningResource } from "../types";
 
-const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
+const ICON_MAP: Record<
+  string,
+  React.ComponentType<{ className?: string }>
+> = {
   Waypoints,
   Network,
   Database,
   Terminal,
   BrainCircuit,
-  Layers,
-  Cpu,
+  Layers: Layers3,
   Code2,
 };
 
@@ -45,57 +53,78 @@ export function LearningResourceCard({
   return (
     <Link
       href={resource.href}
+      aria-label={`Explore ${resource.title} curriculum`}
       className={cn(
-        "group block rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-        className
+        "group block h-full rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+        className,
       )}
     >
-      <Card className="flex h-full flex-col justify-between shadow-none transition-all duration-200 hover:border-foreground/20 hover:bg-muted/30">
-        <CardHeader className="gap-3">
-          <div className="flex items-center justify-between gap-2">
-            <div className="flex size-9 shrink-0 items-center justify-center rounded-lg border bg-muted/50 text-foreground transition-colors group-hover:bg-foreground group-hover:text-background">
-              <Icon className="size-4.5" />
+      <Card className="relative flex h-full min-h-[245px] flex-col overflow-hidden border-border/80 bg-card shadow-none transition-all duration-200 ease-out group-hover:-translate-y-0.5 group-hover:border-foreground/20 group-hover:shadow-sm">
+        <CardHeader className="gap-4 p-4 sm:p-5">
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-border/80 bg-muted/50 text-foreground transition-colors duration-200 group-hover:bg-primary group-hover:text-primary-foreground">
+              <Icon className="size-[18px]" aria-hidden="true" />
             </div>
 
-            <Badge variant="outline" className="text-[11px] font-normal">
+            <Badge
+              variant="outline"
+              className="max-w-[55%] truncate rounded-full px-2.5 py-1 text-[11px] font-medium text-muted-foreground"
+            >
               {resource.trackLabel}
             </Badge>
           </div>
 
-          <div>
-            <CardTitle className="text-base font-semibold tracking-tight transition-colors group-hover:text-foreground">
+          <div className="space-y-2">
+            <CardTitle className="text-base font-semibold leading-6 tracking-tight text-foreground transition-colors sm:text-[17px]">
               {resource.title}
             </CardTitle>
-            <p className="mt-1.5 text-xs leading-5 text-muted-foreground line-clamp-2">
+
+            <p className="line-clamp-3 min-h-[3.75rem] text-[13px] leading-[1.55rem] text-muted-foreground">
               {resource.shortDescription}
             </p>
           </div>
         </CardHeader>
 
-        <CardContent className="space-y-3 pt-0">
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-muted-foreground">
-            <div className="flex items-center gap-1.5">
-              <ListOrdered className="size-3.5 text-muted-foreground/80" />
-              <span>{resource.modulesCount} modules</span>
+        <CardContent className="mt-auto px-4 pb-4 pt-0 sm:px-5">
+          <div className="grid grid-cols-2 gap-x-3 gap-y-2 border-t border-border/70 pt-3">
+            <div className="flex min-w-0 items-center gap-2 text-xs text-muted-foreground">
+              <ListOrdered
+                className="size-3.5 shrink-0"
+                aria-hidden="true"
+              />
+              <span className="truncate">
+                {resource.modulesCount} modules
+              </span>
             </div>
 
-            <div className="flex items-center gap-1.5">
-              <BookOpen className="size-3.5 text-muted-foreground/80" />
-              <span>{resource.topicsCount} topics</span>
+            <div className="flex min-w-0 items-center gap-2 text-xs text-muted-foreground">
+              <BookOpen
+                className="size-3.5 shrink-0"
+                aria-hidden="true"
+              />
+              <span className="truncate">
+                {resource.topicsCount} topics
+              </span>
             </div>
 
-            <div className="flex items-center gap-1.5">
-              <Clock className="size-3.5 text-muted-foreground/80" />
+            <div className="col-span-2 flex items-center gap-2 text-xs text-muted-foreground">
+              <Clock3 className="size-3.5 shrink-0" aria-hidden="true" />
               <span>{resource.estimatedDuration}</span>
+              <span className="text-border">·</span>
+              <span>{resource.level}</span>
             </div>
           </div>
         </CardContent>
 
-        <CardFooter className="border-t bg-muted/20 py-2.5">
-          <div className="flex w-full items-center justify-between text-xs">
-            <span className="font-medium text-foreground">Explore curriculum</span>
-            <ArrowRight className="size-3.5 text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-foreground" />
-          </div>
+        <CardFooter className="flex items-center justify-between border-t border-border/70 bg-muted/20 px-4 py-3 sm:px-5">
+          <span className="text-xs font-medium text-foreground">
+            Explore curriculum
+          </span>
+
+          <ArrowRight
+            className="size-4 text-muted-foreground transition-transform duration-200 group-hover:translate-x-1 group-hover:text-foreground"
+            aria-hidden="true"
+          />
         </CardFooter>
       </Card>
     </Link>

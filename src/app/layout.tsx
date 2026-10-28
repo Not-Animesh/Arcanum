@@ -1,10 +1,10 @@
 
 import type { Metadata } from "next";
 import { Poppins, JetBrains_Mono } from "next/font/google";
+import type { ReactNode } from "react";
 
 import "./globals.css";
 import { ThemeProvider } from "@/components/layout/theme-provider";
-import { Navbar } from "@/components/layout/navbar";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -63,7 +63,7 @@ export const metadata: Metadata = {
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: ReactNode;
 }>) {
   return (
     <html
@@ -78,10 +78,7 @@ export default function RootLayout({
           enableSystem={false}
           disableTransitionOnChange
         >
-          <Navbar />
-          <main className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
-            {children}
-          </main>
+          {children}
         </ThemeProvider>
       </body>
     </html>

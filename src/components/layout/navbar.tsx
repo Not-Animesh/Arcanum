@@ -12,38 +12,35 @@ import {
     Sun,
     X,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { cn } from "@/lib/utils";
 
 const links = [
     { href: "/dashboard", label: "Dashboard" },
-    { href: "/problems", label: "Problems" },
-    { href: "/roadmap", label: "Roadmap" },
+    { href: "/practice", label: "Practice" },
+    { href: "/learning-paths", label: "Learning Paths" },
 ];
 
 export function Navbar() {
     const pathname = usePathname();
-    const { theme, setTheme } = useTheme();
-    const [mounted, setMounted] = useState(false);
+    const { resolvedTheme, setTheme } = useTheme();
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-    useEffect(() => {
-        setMounted(true);
-    }, []);
-
-    useEffect(() => {
-        setMobileMenuOpen(false);
-    }, [pathname]);
 
     const isActive = (href: string) =>
         pathname === href || pathname.startsWith(`${href}/`);
 
+    const closeMobileMenu = () => setMobileMenuOpen(false);
+
+    const toggleTheme = () => {
+        setTheme(resolvedTheme === "dark" ? "light" : "dark");
+    };
+
     return (
         <header className="sticky top-0 z-50 w-full border-b border-border/70 bg-background/90 backdrop-blur-md">
             <nav className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
-                {/* Brand */}
                 <Link
                     href="/"
+                    onClick={closeMobileMenu}
                     className="group flex shrink-0 items-center gap-2.5"
                     aria-label="Arcanum home"
                 >
@@ -57,12 +54,12 @@ export function Navbar() {
                     </span>
                 </Link>
 
-                {/* Desktop navigation */}
                 <div className="hidden items-center gap-1 md:flex">
                     {links.map((link) => (
                         <Link
                             key={link.href}
                             href={link.href}
+                            aria-current={isActive(link.href) ? "page" : undefined}
                             className={cn(
                                 "nav-link rounded-md px-3 py-1.5 text-sm font-medium transition-colors duration-200",
                                 isActive(link.href)
@@ -75,24 +72,15 @@ export function Navbar() {
                     ))}
                 </div>
 
-                {/* Actions */}
                 <div className="flex items-center gap-2">
                     <button
                         type="button"
-                        onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-                        disabled={!mounted}
-                        aria-label={
-                            mounted
-                                ? `Switch to ${theme === "dark" ? "light" : "dark"} mode`
-                                : "Toggle theme"
-                        }
-                        className="inline-flex h-9 w-9 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground disabled:opacity-50"
+                        onClick={toggleTheme}
+                        aria-label="Toggle color theme"
+                        className="inline-flex h-9 w-9 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
                     >
-                        {mounted && theme === "dark" ? (
-                            <Sun className="h-4 w-4" />
-                        ) : (
-                            <Moon className="h-4 w-4" />
-                        )}
+                        <Sun className="hidden h-4 w-4 dark:block" />
+                        <Moon className="block h-4 w-4 dark:hidden" />
                     </button>
 
                     <button
@@ -105,12 +93,12 @@ export function Navbar() {
                         <ArrowUpRight className="h-3.5 w-3.5" />
                     </button>
 
-                    {/* Mobile menu toggle */}
                     <button
                         type="button"
                         onClick={() => setMobileMenuOpen((open) => !open)}
                         aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
                         aria-expanded={mobileMenuOpen}
+                        aria-controls="public-mobile-navigation"
                         className="inline-flex h-9 w-9 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground md:hidden"
                     >
                         {mobileMenuOpen ? (
@@ -122,14 +110,18 @@ export function Navbar() {
                 </div>
             </nav>
 
-            {/* Mobile navigation */}
             {mobileMenuOpen && (
-                <div className="border-t border-border/70 bg-background px-4 py-3 md:hidden">
+                <div
+                    id="public-mobile-navigation"
+                    className="border-t border-border/70 bg-background px-4 py-3 md:hidden"
+                >
                     <div className="mx-auto flex max-w-6xl flex-col gap-1">
                         {links.map((link) => (
                             <Link
                                 key={link.href}
                                 href={link.href}
+                                onClick={closeMobileMenu}
+                                aria-current={isActive(link.href) ? "page" : undefined}
                                 className={cn(
                                     "rounded-md px-3 py-2.5 text-sm font-medium transition-colors",
                                     isActive(link.href)
@@ -140,6 +132,7 @@ export function Navbar() {
                                 {link.label}
                             </Link>
                         ))}
+
                         <button
                             type="button"
                             disabled

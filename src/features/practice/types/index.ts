@@ -1,4 +1,7 @@
+
 export type ProblemDifficulty = "Easy" | "Medium" | "Hard";
+
+export type SubjectSlug = "dsa" | "dbms" | "oops" | "cn" | "os";
 
 export type ProblemCategory =
   | "All"
@@ -6,16 +9,15 @@ export type ProblemCategory =
   | "DBMS"
   | "Operating Systems"
   | "Computer Networks"
-  | "System Design"
   | "OOP Concepts";
 
 export interface PracticeProblem {
   id: string;
   title: string;
-  category: ProblemCategory;
-  subjectSlug: string;
+  category: Exclude<ProblemCategory, "All">;
+  subjectSlug: SubjectSlug;
   difficulty: ProblemDifficulty;
-  acceptanceRate: string;
+  acceptanceRate: string | null;
   tags: string[];
   starterNote?: string;
 }

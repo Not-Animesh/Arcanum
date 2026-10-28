@@ -159,28 +159,6 @@ export const SAMPLE_PRACTICE_PROBLEMS: PracticeProblem[] = [
     starterNote: "Track frame state and page miss counts.",
   },
 
-  // System Design
-  {
-    id: "prob-16",
-    title: "Consistent Hashing Ring with Virtual Nodes",
-    category: "System Design",
-    subjectSlug: "system-design",
-    difficulty: "Medium",
-    acceptanceRate: "51.2%",
-    tags: ["Distributed Systems", "Hashing", "Caching"],
-    starterNote: "Key redistribution minimization upon node failure.",
-  },
-  {
-    id: "prob-17",
-    title: "Design a Distributed Rate Limiter (Token Bucket)",
-    category: "System Design",
-    subjectSlug: "system-design",
-    difficulty: "Medium",
-    acceptanceRate: "48.6%",
-    tags: ["Rate Limiting", "Redis", "Concurrency"],
-    starterNote: "Sliding window log vs token bucket evaluation.",
-  },
-
   // OOP Concepts
   {
     id: "prob-18",

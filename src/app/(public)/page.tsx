@@ -42,41 +42,42 @@ export const metadata: Metadata = {
   },
 };
 
+
 const TRACKS = [
   {
     title: "Data Structures & Algorithms",
     short: "DSA",
     description:
-      "Build problem-solving skills through organized topics, patterns, and coding exercises.",
+      "Master data structures, algorithms, problem-solving patterns, and coding interview questions through structured modules and practice.",
     icon: Code2,
   },
   {
-    title: "Core Computer Science",
-    short: "CORE CS",
+    title: "Database Management Systems",
+    short: "DBMS",
     description:
-      "Strengthen your understanding of DBMS, operating systems, OOP, and computer networks.",
+      "Learn database concepts, SQL, normalization, transactions, indexing, and query processing for technical interviews.",
     icon: Layers3,
   },
   {
-    title: "System Design",
-    short: "DESIGN",
+    title: "Object-Oriented Programming",
+    short: "OOP",
     description:
-      "Explore architecture concepts, design trade-offs, and the foundations of scalable systems.",
+      "Understand classes, objects, inheritance, polymorphism, abstraction, encapsulation, and essential OOP principles.",
+    icon: BookOpen,
+  },
+  {
+    title: "Computer Networks",
+    short: "CN",
+    description:
+      "Study network models, protocols, TCP/IP, HTTP, routing, and other essential networking concepts.",
     icon: Compass,
   },
   {
-    title: "Data Engineering",
-    short: "DATA",
+    title: "Operating Systems",
+    short: "OS",
     description:
-      "Build your foundation in data systems, pipelines, and engineering concepts.",
+      "Build your understanding of processes, threads, CPU scheduling, synchronization, memory management, and deadlocks.",
     icon: Brain,
-  },
-  {
-    title: "Web Design",
-    short: "WEB",
-    description:
-      "Develop your web design and frontend skills through a structured learning path.",
-    icon: GraduationCap,
   },
 ];
 
@@ -124,7 +125,7 @@ const STEPS = [
     number: "01",
     title: "Choose your learning path",
     description:
-      "Start with DSA, Core CS, System Design, Data Engineering, or Web Design based on your goals.",
+      "Start with DSA or Core CS, covering DBMS, OOP, Computer Networks, and Operating Systems..",
   },
   {
     number: "02",
