@@ -1,15 +1,7 @@
-
 "use client";
 
 import * as React from "react";
-import {
-  BookOpen,
-  CheckCircle2,
-  ChevronRight,
-  Clock3,
-  FileText,
-  Layers3,
-} from "lucide-react";
+import { BookOpen, CheckCircle2, Layers3 } from "lucide-react";
 
 import {
   Accordion,
@@ -18,9 +10,9 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
-import type { CurriculumModule, TopicItem } from "../types";
-import { TopicDrawer } from "./topic-drawer";
-import { cn } from "@/lib/utils";
+import type { CurriculumModule } from "../types";
+import { TopicRow } from "./topic-row";
+import { useSolvedProblems } from "../hooks/use-solved-problems";
 
 interface CurriculumSyllabusProps {
   modules: CurriculumModule[];
@@ -31,11 +23,7 @@ export function CurriculumSyllabus({
   modules,
   subjectSlug,
 }: CurriculumSyllabusProps) {
-  const [selectedTopic, setSelectedTopic] = React.useState<{
-    topic: TopicItem;
-    moduleTitle: string;
-    moduleNumber: number;
-  } | null>(null);
+  const solvedIds = useSolvedProblems();
 
   const defaultValues = React.useMemo(
     () => modules.slice(0, 2).map((module) => module.id),
@@ -98,7 +86,7 @@ export function CurriculumSyllabus({
           defaultValue={defaultValues}
           className="w-full space-y-3"
         >
-          {modules.map((module, index) => (
+          {modules.map((module) => (
             <AccordionItem
               key={module.id}
               value={module.id}
@@ -143,54 +131,14 @@ export function CurriculumSyllabus({
                 ) : (
                   <div className="space-y-1 p-2 sm:p-3">
                     {module.topics.map((topic, topicIndex) => (
-                      <button
+                      <TopicRow
                         key={topic.id}
-                        type="button"
-                        onClick={() =>
-                          setSelectedTopic({
-                            topic,
-                            moduleTitle: module.title,
-                            moduleNumber: module.moduleNumber,
-                          })
-                        }
-                        className={cn(
-                          "group/topic flex w-full items-center gap-3 rounded-lg px-3 py-3 text-left transition-colors",
-                          "hover:bg-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-                        )}
-                        aria-label={`Open topic: ${topic.title}`}
-                      >
-                        <div className="flex size-8 shrink-0 items-center justify-center rounded-lg border border-border/70 bg-background text-muted-foreground transition-colors group-hover/topic:border-foreground/20 group-hover/topic:text-foreground">
-                          <FileText
-                            className="size-3.5"
-                            aria-hidden="true"
-                          />
-                        </div>
-
-                        <div className="min-w-0 flex-1 space-y-0.5">
-                          <span className="block text-[13px] font-medium leading-5 text-foreground/90 transition-colors group-hover/topic:text-foreground">
-                            {topic.title}
-                          </span>
-
-                          <span className="block text-[11px] text-muted-foreground">
-                            Topic {topicIndex + 1} of {module.topics.length}
-                          </span>
-                        </div>
-
-                        {topic.duration && (
-                          <span className="hidden shrink-0 items-center gap-1.5 text-xs text-muted-foreground sm:inline-flex">
-                            <Clock3
-                              className="size-3.5"
-                              aria-hidden="true"
-                            />
-                            {topic.duration}
-                          </span>
-                        )}
-
-                        <ChevronRight
-                          className="size-4 shrink-0 text-muted-foreground/60 transition-transform group-hover/topic:translate-x-0.5 group-hover/topic:text-foreground"
-                          aria-hidden="true"
-                        />
-                      </button>
+                        topic={topic}
+                        index={topicIndex}
+                        total={module.topics.length}
+                        subjectSlug={subjectSlug}
+                        solvedIds={solvedIds}
+                      />
                     ))}
                   </div>
                 )}
@@ -210,20 +158,12 @@ export function CurriculumSyllabus({
             Learn at your own pace
           </p>
           <p className="text-xs leading-5 text-muted-foreground">
-            Open a topic to review its notes and focus areas, then practise
-            relevant problems to check your understanding.
+            Open a topic to see its learning resources and related practice
+            questions, then jump straight into the problems to check your
+            understanding.
           </p>
         </div>
       </div>
-
-      <TopicDrawer
-        topic={selectedTopic?.topic ?? null}
-        moduleTitle={selectedTopic?.moduleTitle}
-        moduleNumber={selectedTopic?.moduleNumber}
-        subjectSlug={subjectSlug}
-        isOpen={Boolean(selectedTopic)}
-        onClose={() => setSelectedTopic(null)}
-      />
     </section>
   );
 }

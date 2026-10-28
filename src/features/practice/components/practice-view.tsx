@@ -1,4 +1,3 @@
-
 "use client";
 
 import * as React from "react";
@@ -235,6 +234,7 @@ function ProblemRow({
   completed,
   bookmarked,
   expanded,
+  highlighted,
   onToggleCompleted,
   onToggleBookmarked,
   onToggleExpanded,
@@ -243,15 +243,18 @@ function ProblemRow({
   completed: boolean;
   bookmarked: boolean;
   expanded: boolean;
+  highlighted: boolean;
   onToggleCompleted: () => void;
   onToggleBookmarked: () => void;
   onToggleExpanded: () => void;
 }) {
   return (
     <div
+      id={`problem-${problem.id}`}
       className={cn(
-        "group border-b last:border-b-0 transition-colors",
+        "group scroll-mt-28 border-b last:border-b-0 transition-colors",
         completed ? "bg-emerald-500/[0.035]" : "hover:bg-muted/30",
+        highlighted && "bg-primary/[0.06] ring-1 ring-inset ring-primary/40",
       )}
     >
       <div className="grid grid-cols-[24px_minmax(0,1fr)_auto] items-center gap-3 px-3 py-3 sm:px-4">
@@ -505,6 +508,7 @@ export function PracticeView() {
   const searchParams = useSearchParams();
   const subjectParam = searchParams.get("subject");
   const topicParam = searchParams.get("topic") ?? searchParams.get("topicId");
+  const problemParam = searchParams.get("problem");
 
   const fixedCategory =
     subjectParam && SLUG_TO_CATEGORY[subjectParam]
@@ -526,6 +530,7 @@ export function PracticeView() {
   });
   const [progressLoaded, setProgressLoaded] = React.useState(false);
   const [expandedIds, setExpandedIds] = React.useState<string[]>([]);
+  const [highlightedId, setHighlightedId] = React.useState<string | null>(null);
   const [statusFilter, setStatusFilter] =
     React.useState<ProblemStatusFilter>("all");
   const [bookmarksOnly, setBookmarksOnly] = React.useState(false);
@@ -534,6 +539,31 @@ export function PracticeView() {
     setProgress(readProgress());
     setProgressLoaded(true);
   }, []);
+
+  // Deep link: /practice?subject=dsa&problem=a2z-401 -> expand, scroll to and
+  // briefly highlight that exact question.
+  React.useEffect(() => {
+    if (!problemParam || !ALL_PROBLEMS.some((p) => p.id === problemParam)) {
+      return;
+    }
+
+    setExpandedIds((current) =>
+      current.includes(problemParam) ? current : [...current, problemParam],
+    );
+    setHighlightedId(problemParam);
+
+    const scrollTimer = window.setTimeout(() => {
+      document
+        .getElementById(`problem-${problemParam}`)
+        ?.scrollIntoView({ behavior: "smooth", block: "center" });
+    }, 150);
+    const clearTimer = window.setTimeout(() => setHighlightedId(null), 3500);
+
+    return () => {
+      window.clearTimeout(scrollTimer);
+      window.clearTimeout(clearTimer);
+    };
+  }, [problemParam]);
 
   React.useEffect(() => {
     if (!progressLoaded) return;
@@ -1073,6 +1103,7 @@ export function PracticeView() {
                   getBookmarkId(problem.category, problem.id),
                 )}
                 expanded={expandedIds.includes(problem.id)}
+                highlighted={highlightedId === problem.id}
                 onToggleCompleted={() => toggleCompleted(problem.id)}
                 onToggleBookmarked={() =>
                   toggleBookmark(problem.category, problem.id)
