@@ -97,7 +97,7 @@ export function AppSidebar() {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton
-              render={<Link href="/dashboard" />}
+              render={<Link href="/" />}
               size="lg"
               tooltip="Arcanum home"
               className="h-11 gap-3 rounded-lg px-2.5"

@@ -33,11 +33,7 @@ export const metadata: Metadata = {
   },
   description:
     "A free learning platform for data structures, algorithms, computer science fundamentals, coding practice, and interview preparation.",
-  icons: {
-    icon: "/images/logo.png",
-    shortcut: "/images/logo.png",
-    apple: "/images/logo.png",
-  },
+
   keywords: [
     "Arcanum",
     "coding interview preparation",

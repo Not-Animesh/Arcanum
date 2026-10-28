@@ -4,6 +4,8 @@
 import * as React from "react";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
+import { useTheme } from "next-themes";
+import { Laptop, Moon, Sun } from "lucide-react";
 
 import {
   Breadcrumb,
@@ -14,6 +16,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { SidebarTrigger } from "@/components/ui/sidebar";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 const ROUTE_LABELS: Record<string, string> = {
@@ -44,7 +47,14 @@ export function AppHeader({ actions, className }: AppHeaderProps) {
   const pathname = usePathname() || "/dashboard";
   const searchParams = useSearchParams();
   const selectedSubject = searchParams.get("subject");
+  const { theme, setTheme, resolvedTheme } = useTheme();
+  const [mounted, setMounted] = React.useState(false);
 
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const isDark = mounted && (resolvedTheme ?? theme) === "dark";
   const cleanPath = pathname.replace(/\/+$/, "") || "/dashboard";
 
   const breadcrumbs = React.useMemo(() => {
@@ -56,7 +66,6 @@ export function AppHeader({ actions, className }: AppHeaderProps) {
 
     return segments.map((segment, index) => {
       const href = `/${segments.slice(0, index + 1).join("/")}`;
-
       let label = ROUTE_LABELS[href] ?? formatSegmentTitle(segment);
 
       if (href === "/practice" && selectedSubject) {
@@ -78,11 +87,12 @@ export function AppHeader({ actions, className }: AppHeaderProps) {
         className,
       )}
     >
-      <SidebarTrigger
-        className="size-9 shrink-0 rounded-md text-muted-foreground hover:bg-accent hover:text-accent-foreground"
-      />
+      <SidebarTrigger className="size-9 shrink-0 rounded-md text-muted-foreground hover:bg-accent hover:text-accent-foreground" />
 
-      <div className="h-5 w-px shrink-0 bg-border/70" aria-hidden="true" />
+      <div
+        className="h-5 w-px shrink-0 bg-border/70"
+        aria-hidden="true"
+      />
 
       <div className="min-w-0 flex-1">
         <Breadcrumb>
@@ -115,11 +125,31 @@ export function AppHeader({ actions, className }: AppHeaderProps) {
         </Breadcrumb>
       </div>
 
-      {actions && (
-        <div className="ml-auto flex shrink-0 items-center gap-2">
-          {actions}
-        </div>
-      )}
+      <div className="ml-auto flex shrink-0 items-center gap-2">
+        {actions}
+
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon"
+          className="size-9 rounded-md"
+          onClick={() => setTheme(isDark ? "light" : "dark")}
+          aria-label={
+            mounted
+              ? `Switch to ${isDark ? "light" : "dark"} mode`
+              : "Toggle color theme"
+          }
+          title={isDark ? "Switch to light mode" : "Switch to dark mode"}
+        >
+          {!mounted ? (
+            <Laptop className="size-[18px]" />
+          ) : isDark ? (
+            <Sun className="size-[18px]" />
+          ) : (
+            <Moon className="size-[18px]" />
+          )}
+        </Button>
+      </div>
     </header>
   );
 }

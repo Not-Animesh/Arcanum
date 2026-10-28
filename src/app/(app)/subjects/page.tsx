@@ -60,13 +60,18 @@ export default function SubjectsCatalogPage() {
         </div>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
-          {subjects.map((resource) => (
-            <LearningResourceCard
-              key={resource.id}
-              resource={resource}
-              className="h-full"
-            />
-          ))}
+          {subjects
+            .filter(
+              (resource): resource is NonNullable<typeof resource> =>
+                resource !== undefined,
+            )
+            .map((resource) => (
+              <LearningResourceCard
+                key={resource.id}
+                resource={resource}
+                className="h-full"
+              />
+            ))}
         </div>
 
         {subjects.length === 0 && (
