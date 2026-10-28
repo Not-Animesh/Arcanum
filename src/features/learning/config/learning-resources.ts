@@ -1,4 +1,14 @@
 import type { LearningResource } from "../types";
+import { CURRICULA } from "./curricula";
+
+/** Counts come from the real curriculum so the cards never drift out of date. */
+function countsFor(slug: string) {
+  const modules = CURRICULA[slug]?.modules ?? [];
+  return {
+    modulesCount: modules.length,
+    topicsCount: modules.reduce((total, m) => total + m.topics.length, 0),
+  };
+}
 
 export const LEARNING_RESOURCES: LearningResource[] = [
   {
@@ -10,8 +20,7 @@ export const LEARNING_RESOURCES: LearningResource[] = [
     trackId: "dsa",
     trackLabel: "DSA",
     iconName: "Waypoints",
-    modulesCount: 12,
-    topicsCount: 54,
+    ...countsFor("dsa"),
     estimatedDuration: "80 hours",
     level: "Intermediate",
     href: "/subjects/dsa",
@@ -23,11 +32,10 @@ export const LEARNING_RESOURCES: LearningResource[] = [
     title: "Database Management Systems",
     shortDescription:
       "Relational modeling, indexing, normalization, transaction isolation, and query optimization.",
-    trackId: "core-cs",
-    trackLabel: "Core CS",
+    trackId: "dbms",
+    trackLabel: "DBMS",
     iconName: "Database",
-    modulesCount: 8,
-    topicsCount: 32,
+    ...countsFor("dbms"),
     estimatedDuration: "30 hours",
     level: "Intermediate",
     href: "/subjects/dbms",
@@ -39,11 +47,10 @@ export const LEARNING_RESOURCES: LearningResource[] = [
     title: "Object-Oriented Programming",
     shortDescription:
       "Encapsulation, inheritance, polymorphism, abstraction, design patterns, and SOLID principles.",
-    trackId: "core-cs",
-    trackLabel: "Core CS",
+    trackId: "oops",
+    trackLabel: "OOPs",
     iconName: "BrainCircuit",
-    modulesCount: 6,
-    topicsCount: 24,
+    ...countsFor("oops"),
     estimatedDuration: "20 hours",
     level: "Beginner",
     href: "/subjects/oops",
@@ -55,11 +62,10 @@ export const LEARNING_RESOURCES: LearningResource[] = [
     title: "Computer Networks",
     shortDescription:
       "Understand how devices communicate, how network protocols work, and how data moves across the internet.",
-    trackId: "core-cs",
-    trackLabel: "Core CS",
+    trackId: "cn",
+    trackLabel: "Computer Networks",
     iconName: "Network",
-    modulesCount: 10,
-    topicsCount: 38,
+    ...countsFor("cn"),
     estimatedDuration: "35 hours",
     level: "Intermediate",
     href: "/subjects/cn",
@@ -71,11 +77,10 @@ export const LEARNING_RESOURCES: LearningResource[] = [
     title: "Operating Systems",
     shortDescription:
       "Processes, multi-threading, CPU scheduling, virtual memory, concurrency, and file systems.",
-    trackId: "core-cs",
-    trackLabel: "Core CS",
+    trackId: "os",
+    trackLabel: "Operating Systems",
     iconName: "Terminal",
-    modulesCount: 8,
-    topicsCount: 34,
+    ...countsFor("os"),
     estimatedDuration: "32 hours",
     level: "Intermediate",
     href: "/subjects/os",

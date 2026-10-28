@@ -1,6 +1,10 @@
 export type TrackId =
   | "all"
   | "dsa"
+  | "dbms"
+  | "oops"
+  | "cn"
+  | "os"
   | "core-cs"
   | "system-design"
   | "data-engineering"

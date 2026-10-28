@@ -1,4 +1,4 @@
-import { LearningTrack } from "../types";
+import type { LearningTrack } from "../types";
 
 export const LEARNING_TRACKS: LearningTrack[] = [
   {
@@ -12,23 +12,23 @@ export const LEARNING_TRACKS: LearningTrack[] = [
     description: "Master algorithms, fundamental data structures, and optimal problem-solving patterns.",
   },
   {
-    id: "core-cs",
-    label: "Core CS",
-    description: "Essential systems fundamentals: Operating Systems, Networks, DBMS, and OOP concepts.",
+    id: "dbms",
+    label: "DBMS",
+    description: "Relational modeling, SQL, normalization, indexing, and transaction management.",
   },
   {
-    id: "system-design",
-    label: "System Design",
-    description: "Architect scalable, fault-tolerant, and high-throughput distributed systems.",
+    id: "oops",
+    label: "OOPs",
+    description: "Object-oriented principles, SOLID design, and essential design patterns.",
   },
   {
-    id: "data-engineering",
-    label: "Data Engineering",
-    description: "Modern data pipelines, stream processing, distributed storage, and orchestration.",
+    id: "cn",
+    label: "Computer Networks",
+    description: "How devices communicate: network models, protocols, routing, and the internet stack.",
   },
   {
-    id: "web-design",
-    label: "Web Design",
-    description: "Modern interface development, accessible layout design, and frontend systems.",
+    id: "os",
+    label: "Operating Systems",
+    description: "Processes, threads, CPU scheduling, synchronization, memory, and file systems.",
   },
 ];
